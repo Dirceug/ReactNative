@@ -44,7 +44,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     input: {
-        color:"red"
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        padding: 10,
+        marginVertical: 10,
+        width: '80%'
+    },
+    button: {
+
+    },
+    buttonText: {
+
     }
 })
 
