@@ -1,13 +1,18 @@
 import React, {useState} from "react";
 import { SafeAreaView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { useNavigation } from 'react-navigation/native'
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const navigation = useNavigation()
+
     const handleLogin = () => {
-        //Aqui implementamos a lógica de login
-        console.log(`Email: ${email},Password: ${password} `)
+        if(email === 'xandy' && password === '123') {
+            navigation.navigate('main')
+        } 
+        else{alert('E-mail ou senha inválidos')}
     }
 
     return (
@@ -52,10 +57,16 @@ const styles = StyleSheet.create({
         width: '80%'
     },
     button: {
-
+        backgroundColor: "#3498db",
+        borderRadius: 5,
+        padding: 10,
+        width: "80%",
+        alignItens: 'center'
     },
     buttonText: {
-
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 18
     }
 })
 
