@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { Text, View, SafeAreaView } from "react-native";
+import { Container } from './styles'
 
-export default class Main extends Component {
-    render(){
+export default function Main() {
         return (
-            <View>
-                <Text>Página Principal</Text>
-            </View>
+            <SafeAreaView>
+               <Container />
+            </SafeAreaView>
         )
     }
-}
