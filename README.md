@@ -77,3 +77,17 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+## Aula 5
+Configuração do Vector Icons.
+Pegar na documentação e colar o trecho no arquivo Androis/app/build.gradle:
+(
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Specify font files
+]
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+)
+Documentação: https://github.com/oblador/react-native-vector-icons?tab=readme-ov-file#android-setup
+
