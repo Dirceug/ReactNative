@@ -80,14 +80,53 @@ To learn more about React Native, take a look at the following resources:
 
 
 ## Aula 5
-Configuração do Vector Icons.
+1 - Configuração do Vector Icons.
 Pegar na documentação e colar o trecho no arquivo Androis/app/build.gradle:
 (
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Specify font files
 ]
 
-apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+```
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle") 
 )
 Documentação: https://github.com/oblador/react-native-vector-icons?tab=readme-ov-file#android-setup
+```
 
+2 - Estilos de main (Container, )
+
+## Aula 6
+
+1 - Vamos pegar os dados de usuário pelo input:
+
+- Instalar o Axios (npm i axios)
+- cria o arquivo de api (src/services/api)
+```
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: "https://api.github.com"
+});
+
+export default api;
+```
+
+- Mudanças no main para tratar os dados:
+
+```
+handleAddUser = async () => {
+        const { users, newUser} = this.state
+        const response = await api.get(`/users/${newUser}`)
+        const data = {
+            name: response.data.name,
+            login: response.data.login,
+            bio: response.data.bio,
+            avatar: response.data.avatar_url
+        };
+
+        this.state({
+            users: [...users, data],
+            newUser: ''
+        })
+        console.log(data)
+    }```
