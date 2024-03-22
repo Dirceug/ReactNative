@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Text, View, SafeAreaView } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { Container, Form, Input, SubmitButton } from './styles'
+import { Container, Form, Input, SubmitButton, List, User, ProfileButton, ProfileButtonText} from './styles'
 import api from '../services/api'
+import { Keyboard } from "react-native";
 
 import { Container } from './styles'
 
@@ -22,17 +23,19 @@ export default class Main extends Component() {
             avatar: response.data.avatar_url
         };
 
-        this.state({
+        this.setState({
             users: [...users, data],
             newUser: ''
         })
+
+        Keyboard.dismiss()
+
         console.log(data)
     }
 
     render() {
-        const { users, newUser } = this.state
+        const { users, newUser } = this.state;
         return (
-            <SafeAreaView>
              <Container>
                 <Form>
                     <Input
@@ -48,8 +51,23 @@ export default class Main extends Component() {
                         <Icon name="add" size={20} color="#fff"/>
                     </SubmitButton>
                 </Form>
+                <List 
+                    showVerticalScrollIndicator={false}
+                    data={users}
+                    keyExtractor={user => user.login}
+                    renderItem={({item})=>(
+                        <User>
+                            <Avatar source={{uri: item.avatar}} />
+                            <Name>{item.name}<Name/>
+                            <Bio>{item.bio}</Bio>
+                            <ProfileButton onPress={() => {}}
+                                <ProfileButtonText> Ver perfil </ProfileButtonText>
+                            <ProfileButton />
+                        <User/>
+                    )
+                }
+                />
             </Container>
-            </SafeAreaView>
         )
     }
 }

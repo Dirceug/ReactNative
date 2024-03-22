@@ -130,3 +130,13 @@ handleAddUser = async () => {
         })
         console.log(data)
     }```
+
+
+### Aula 7
+
+- Keiboard Dissmiss
+
+```
+import { Keyboard } from "react-native";
+        Keyboard.dismiss()
+```
