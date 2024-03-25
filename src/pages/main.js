@@ -1,73 +1,123 @@
-import React, { Component } from "react";
-import { Text, View, SafeAreaView } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { Container, Form, Input, SubmitButton, List, User, ProfileButton, ProfileButtonText} from './styles'
-import api from '../services/api'
-import { Keyboard } from "react-native";
+import React, {Component} from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import api from '../services/api';
+import {Keyboard, ActivityIndicator, asyncStorage} from 'react-native';
+//import { asyncStorage } from ''
 
-import { Container } from './styles'
+import {
+  Container,
+  Form,
+  Input,
+  SubmitButton,
+  List,
+  User,
+  Avatar,
+  Name,
+  Bio,
+  ProfileButton,
+  ProfileButtonText,
+} from './styles';
+import { AsyncStorage } from 'react-native';
 
-export default class Main extends Component() {
-    state = {
-        newUser: '',
-         users: [],
+export default class Main extends Component {
+  state = {
+    newUser: '',
+    users: [],
+    loading: false
+};
+
+async componentDidMount(_, prevState) {
+    const users = await AsyncStorage.getItem('users')
+    if(users) {
+        this.setState({ users: JSON.parse(users)})
     }
+}
 
-    handleAddUser = async () => {
-        const { users, newUser} = this.state
-        const response = await api.get(`/users/${newUser}`)
+async componentDidUpdate(_, prevState){
+    const { users } = this.state;
+    if(prevState.users !== users) {
+        await AsyncStorage.setItem('users', JSON.stringify(users))
+    }
+}
+
+handleAddUser = async () => {
+    try{
+        const {users, newUser} = this.state;
+        loading: true
+        const response = await api.get(`/users/${newUser}`);
+        
         const data = {
             name: response.data.name,
             login: response.data.login,
             bio: response.data.bio,
-            avatar: response.data.avatar_url
+            avatar: response.data.avatar_url,
         };
-
+        
         this.setState({
             users: [...users, data],
-            newUser: ''
+            newUser: '',
+            loading: false
+        });
+        
+        Keyboard.dismiss();
+    } 
+    catch(error) {
+        alert("usuário não encontrado!");
+        this.setState({
+            loading: false
         })
-
-        Keyboard.dismiss()
-
-        console.log(data)
     }
+};
 
-    render() {
-        const { users, newUser } = this.state;
-        return (
-             <Container>
-                <Form>
-                    <Input
-                    autoCorrect={false}
-                    autoCaptalize={true}
-                    placeholder="Adicionar Usuário"
-                    value={newUser}
-                    onChangeText={text => this.setState({newUser: text})}
-                    returnKeyType='send'
-                    onSubmitEditing={this.handleAddUser}
-                    />
-                    <SubmitButton onPress={this.handleAddUser} >
-                        <Icon name="add" size={20} color="#fff"/>
-                    </SubmitButton>
-                </Form>
-                <List 
-                    showVerticalScrollIndicator={false}
-                    data={users}
-                    keyExtractor={user => user.login}
-                    renderItem={({item})=>(
-                        <User>
-                            <Avatar source={{uri: item.avatar}} />
-                            <Name>{item.name}<Name/>
-                            <Bio>{item.bio}</Bio>
-                            <ProfileButton onPress={() => {}}
-                                <ProfileButtonText> Ver perfil </ProfileButtonText>
-                            <ProfileButton />
-                        <User/>
-                    )
-                }
-                />
-            </Container>
-        )
-    }
+  render() {
+    const {users, newUser} = this.state;
+
+    return (
+      <Container>
+        <Form>
+          <Input
+            autoCorrect={false}
+            autoCapitalize="none"
+            placeholder="Adicionar usuário"
+            value={newUser}
+            onChangeText={text => this.setState({newUser: text})}
+            returnKeyType="send"
+            onSubmitEditing={this.handleAddUser}
+          />
+          <SubmitButton Loading={loading} onPress={this.handleAddUser}>
+            {
+                loading ? 
+                <ActivityIndicator color='#fff' /> :
+                <Icon name="add" size={20} color="#fff" /> 
+            }
+          </SubmitButton>
+        </Form>
+
+        <List
+          showsVerticalScrollIndicator={false}
+          data={users}
+          keyExtractor={user => user.login}
+          renderItem={({item}) => (
+            <User>
+              <Avatar source={{uri: item.avatar}} />
+              <Name>{item.name}</Name>
+              <Bio>{item.bio}</Bio>
+              <ProfileButton onPress={() => {}}>
+                <ProfileButtonText>Ver perfil</ProfileButtonText>
+              </ProfileButton>
+              <ProfileButton onPress={() => {
+                this.setState({
+                    users: this.state.users.filter(user => user.login !== item.login)
+                })
+              }}
+              style={{backgroundColor: '#ffc0cd'}}
+              >
+                <ProfileButtonText>Excluir</ProfileButtonText>
+              </ProfileButton>
+            </User>
+          )}
+        />
+      </Container>
+    );
+  }
 }
