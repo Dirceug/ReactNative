@@ -78,3 +78,15 @@ font-weight: bold;
 color: #fff;
 text-transform: uppercase;
 `
+
+    export const Stars = styled.FlatList.attrs({
+        showVertivalScrollIndicator: false
+    })``;
+    export const AvatarPerfil = styled.View``;
+    export const NamePerfil = styled.View``;
+    export const BioPerfil = styled.View``;
+    export const Starred = styled.View``;
+    export const OwnerAvatar = styled.View``;
+    export const Info = styled.View``;
+    export const Title = styled.View``;
+    export const Author  = styled.View``;

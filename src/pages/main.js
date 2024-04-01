@@ -45,6 +45,14 @@ handleAddUser = async () => {
         const {users, newUser} = this.state;
         loading: true
         const response = await api.get(`/users/${newUser}`);
+
+        if(users.find(user => users.login === response.data.login)) {
+          alert("Usuário já inserido")
+          this.setState({
+            loading: false
+          })
+          return
+        }
         
         const data = {
             name: response.data.name,
@@ -102,7 +110,9 @@ handleAddUser = async () => {
               <Avatar source={{uri: item.avatar}} />
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
-              <ProfileButton onPress={() => {}}>
+              <ProfileButton onPress={() => {
+                this.props.navigation.navigate('user', { user: item})
+              }}>
                 <ProfileButtonText>Ver perfil</ProfileButtonText>
               </ProfileButton>
               <ProfileButton onPress={() => {
